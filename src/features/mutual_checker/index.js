@@ -12,6 +12,7 @@ import { primaryBlogName, userBlogNames } from '../../utils/user.js';
 
 const mutualIconClass = 'xkit-mutual-icon';
 const hiddenAttribute = 'data-mutual-checker-hidden';
+const lengthenedClass = 'xkit-mutual-checker-lengthened';
 const mutualsClass = 'from-mutual';
 const postAttributionSelector = 'header a[rel="author"]';
 
@@ -57,6 +58,13 @@ const styleElement = buildStyle(`
     padding: 0.1875rem 0;
   }
 `);
+
+const lengthenTimelines = () =>
+  [...document.querySelectorAll(followingTimelineSelector)].forEach(timelineElement => {
+    if (!timelineElement.querySelector(keyToCss('manualPaginatorButtons'))) {
+      timelineElement.classList.add(lengthenedClass);
+    }
+  });
 
 const processNotifications = (notificationElements) => {
   notificationElements.forEach(async notificationElement => {
@@ -140,6 +148,7 @@ const getIsFollowingYou = (blogName) => {
 export const main = async function () {
   if (primaryBlogName === undefined) return;
   document.documentElement.append(styleElement);
+  lengthenTimelines();
 
   ({ showOnlyMutuals, showOnlyMutualNotifications } = await getPreferences('mutual_checker'));
 
